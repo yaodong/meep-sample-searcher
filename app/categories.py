@@ -19,7 +19,7 @@ CATEGORIES = {
         }
     },
     '15x30': {
-        'time': '00:25:00',
+        'time': '00:29:58',
         'width': 30,
         'length': 15,
         'graphene_length': 1.5,
@@ -31,14 +31,10 @@ CATEGORIES = {
         'meep_ez': '(component Ez) (center (- dpml 0x) 0 0) (size 0 winput hsilicon)',
         'parts': {
             'main': {
-                'tweak': 'fish_bone',
+                'tweak': 'square',
                 'width': {'offset': 0, 'size': 30},
                 'length': {'offset': 0, 'size': 15}
             }
-        },
-        'tweak_size': {
-            'length': [1, 2],
-            'width': [1, 2],
         }
     },
     '30x30_nov': {
@@ -58,13 +54,28 @@ CATEGORIES = {
                 'width': {'offset': 0, 'size': 30},
                 'length': {'offset': 0, 'size': 30}
             }
-        },
-        'tweak_size': {
-            'length': [2, 5],
-            'width': [2, 5],
         }
     },
-    '30x60': {
+   '30x60_feb': {
+        'time': '01:30:00',
+        'width': 30,
+        'length': 60,
+        'graphene_length': 6,
+        'meep_linput': 2,
+        'meep_loutput': 2,
+        'matlab': '30x60',
+        'meep_input_waveguide': '(center (- (/ (+ dpml linput) 2) 0x) 0 (- (+ dpml wairbound (/ hsilicon 2)) 0z))',
+        'meep_output_waveguide': '(center (- (+ dpml linput lPIC (/ (+ loutput dpml) 2)) 0x) 0 (- (+ dpml wairbound (/ hsilicon 2)) 0z))',
+        'meep_ez': '(component Ez) (center (- dpml 0x) 0 0) (size 0 winput hsilicon)',
+        'parts': {
+            'main': {
+                'tweak': 'square',
+                'width': {'offset': 0, 'size': 30},
+                'length': {'offset': 0, 'size': 60}
+            }
+        }
+    },
+   '30x60': {
         'time': '01:30:00',
         'width': 30,
         'length': 60,

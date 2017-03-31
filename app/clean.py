@@ -12,6 +12,7 @@ def delete_remote_folder(name):
 
 def clean():
     folders = chpc.remote_cmd('ls %s/' % params.CHPC_WORK_DIR)
+    print(folders)
 
     for folder in folders.split("\n"):
         sample = session.query(Sample).filter_by(digest=folder).first()

@@ -13,9 +13,8 @@ cd "{__ROOT_DIR__}/{__SUB_DIR__}"
 rm -rf ./meep-{__MAX_MIN__}-out
 rm -f has-done-{__MAX_MIN__}.lock
 
-module load intel/2016.0.109
-module load impi/5.1.1.109
-module load mpb/1.5.impi
+module load intel/2017.0.098
+module load impi/5.1.3
 module load meep/1.3
 export GUILE_WARN_DEPRECATED="no"
 

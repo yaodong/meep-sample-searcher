@@ -8,9 +8,8 @@ from time import sleep
 def main():
     categories = [
         #'20x60r',
-        #'30x60',
-        #'30x30_nov',
-        '15x30'
+        '30x60_feb',
+        #'15x30'
     ]
 
     print('=')
@@ -19,6 +18,7 @@ def main():
 
         tops = session.query(Sample).filter_by(category=category, status='done').order_by(desc('depth')).limit(10).all()
         draw_sample(tops[0])
+        #draw_sample(session.query(Sample).get(65757))
         print('=' * 20)
         print('current top 10 in category %s:' % category)
         print('num\tdigest\tdepth\t\tmax\t\tmin\t\tdefect')

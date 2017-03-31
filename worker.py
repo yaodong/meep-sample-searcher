@@ -4,11 +4,9 @@ from app import clean
 from app.state_machine import StateMachine
 
 instance_limit = {
-    # '30x30w4': 0,
-    '20x30r': 0,
-    '20x60r': 0,
-    #'30x60': 20,
-    '30x30_nov': 50,
+    #'30x30_nov': 10,
+    #'15x30': 50
+     '30x60_feb': 50
 }
 
 loop_count = -1

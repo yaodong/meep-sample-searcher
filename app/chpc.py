@@ -35,6 +35,7 @@ def rsync(local, dst):
 
 
 def remote_cmd(cmd):
+    #print('sshpass -p %s ssh %s "%s"' % (CHPC_PWD, CHPC_LOGIN, cmd))
     return local_cmd('sshpass -p %s ssh %s "%s"' % (CHPC_PWD, CHPC_LOGIN, cmd))
 
 

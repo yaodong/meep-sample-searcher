@@ -10,10 +10,13 @@ def tweak(points, cfg):
 
     layout = numpy.array(points).reshape((part_width, part_length))
 
-    tweak_size = cfg['tweak_size']
+    tweak_length_size = part_length // 10
+    tweak_width_size = part_width // 10
 
-    tweak_length_size = random.randint(*tweak_size['length'])
-    tweak_width_size = random.randint(*tweak_size['width'])
+    if part_length > 15 and part_width > 15:
+        tweak_width_size = tweak_length_size = random.randint(3, 5)
+    else:
+        tweak_width_size = tweak_length_size = random.randint(2, 4)
 
     tweak_start_length = random.randint(0, part_length - tweak_length_size)
     tweak_start_width = random.randint(0, part_width - tweak_width_size)

@@ -16,6 +16,11 @@ PROVIDERS = {
         'CHPC_SERVER': 'ember',
         'SBATCH_ACCOUNT': 'sensale',
         'SBATCH_PARTITION': 'ember'
+    },
+    'ash': {
+        'CHPC_SERVER': 'ash-guest',
+        'SBATCH_ACCOUNT': 'smithp-guest',
+        'SBATCH_PARTITION': 'ash-guest'
     }
 }
 

@@ -4,11 +4,11 @@ from app.utils import draw_sample
 import random
 
 width = 30
-length = 15
-category = '15x30'
+length = 60
+category = '30x60_feb'
 size = width * length
 
-for defect in range(10, 100, 10):
+for defect in range(10, 100, 5):
     for repeat in range(10):
         points = []
         defect_points = int(size * defect / 100)
@@ -20,7 +20,7 @@ for defect in range(10, 100, 10):
         for _ in range(solid_points):
             points.append(1)
 
-        for _ in range(100):
+        for _ in range(50):
             random.shuffle(points)
 
         s = Sample()
