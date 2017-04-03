@@ -5,3 +5,4 @@ Ex = abs(E_slice).^2;
 ex = mean(Ex(:));
 plane = Ex(25:525,25:525);
 ex = mean(plane(:));
+disp(ex);

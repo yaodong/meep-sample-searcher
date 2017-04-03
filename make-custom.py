@@ -1,11 +1,11 @@
 from app.sample import Sample
 from app.db import session
-from app.utils import draw_sample
 import random
 
-width = 30
-length = 60
-category = '30x60_feb'
+width = 20
+length = 20
+category = 'polarizer'
+group = '20x20'
 size = width * length
 
 for defect in range(10, 100, 5):
@@ -25,9 +25,13 @@ for defect in range(10, 100, 5):
 
         s = Sample()
         s.category = category
+        s.group = group
         s.parent_id = 0
         s.parts = {'main': points}
         s.update_digest()
 
         session.add(s)
         session.commit()
+        break
+
+    break

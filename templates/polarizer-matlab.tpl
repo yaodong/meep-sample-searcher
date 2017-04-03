@@ -13,8 +13,10 @@ LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/os/glnxa64;
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/opengl/lib/glnxa64;
 export LD_LIBRARY_PATH;
 
+~/bin/matlab_{__MATLAB_NAME__}
+
 if [ ! -f result.txt ]; then
-  if [ -f meep-out/hx-000200.00.h5 ]; then
+  if [ -f meep-out/hx-000300.00.h5 ]; then
     cd meep-out
     ~/bin/matlab_{__MATLAB_NAME__} > ../result.txt
     cd ..

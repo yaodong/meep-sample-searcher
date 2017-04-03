@@ -55,5 +55,5 @@ def local_cmd(command):
         logging.debug([out, err])
         return out.decode('utf-8').strip()
     except OSError as e:
-        print("Error2: ", e.strerror)
+        logging.info("Error2: ", e.strerror)
         sys.exit()

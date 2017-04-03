@@ -30,15 +30,15 @@ class MaxMin(Handler):
         self.sample.has_done = 1
 
     def pull(self):
-        print('pulling... %s' % self.sample.id)
+        logging.info('pulling...')
         jobs = self.fetch_jobs()
-        print(jobs)
+
         if len(jobs) > 0:
             self.describe_jobs(jobs)
             raise self.StillRunning()
         else:
             finished = self.finished_jobs()
-            print('meep finished: [%s]' % ', '.join(finished))
+            logging.info('meep finished: [%s]' % ', '.join(finished))
 
             if len(finished) < 2:
                 if self.sample.retried > 3:
@@ -48,7 +48,7 @@ class MaxMin(Handler):
                     raise self.Interrupted()
 
     def rate(self):
-        print('calling matlab')
+        logging.info('calling matlab')
         self.call_matlab()
 
         loss = {}
@@ -58,11 +58,11 @@ class MaxMin(Handler):
         if not self.calculate_rating(loss['max'], loss['min']):
             self.sample.status = self.STATE_ERROR
             self.sample.has_done = 1
-            print('error')
+            logging.info('error')
         else:
             self.sample.status = self.STATE_DONE
             self.sample.has_done = 1
-            print('done')
+            logging.info('done')
 
     def restart(self):
         logging.info('restarting job')
@@ -92,8 +92,6 @@ class MaxMin(Handler):
 
     def make_matlab_files(self):
         self.write_file('matlab.sh', self.render_tpl('matlab', {
-            '__LAYOUT_LENGTH__': self.config['length'],
-            '__LAYOUT_WIDTH__': self.config['width'],
             '__MATLAB_NAME__': self.config['matlab']
         }))
         self.write_file('xy.py', self.render_tpl('xy'))
@@ -104,8 +102,7 @@ class MaxMin(Handler):
         for m_type in self.TYPES:
             content = self.render_tpl('sbatch', {
                 '__NAME__': '%s-%s' % (self.sample.job_name, m_type),
-                '__ROOT_DIR__': CHPC_WORK_DIR,
-                '__SUB_DIR__': self.sample.digest,
+                '__WORKDIR__': self.remote_sample_folder,
                 '__ACCOUNT__': SBATCH_ACCOUNT,
                 '__PARTITION__': SBATCH_PARTITION,
                 '__MAX_MIN__': m_type,

@@ -44,33 +44,3 @@
  (size (+ dpml Lsilicon) (+ dpml Wsilicon dpml) (+ dpml Hsilicon dpml))
  (material (make dielectric (epsilon 10.24))))
 
-
-
- ; pixel z y
- ; pixel ZZZ YYY construction
- (make block
- (center (- (+ dpml Lsilicon (/ Lpixel 2)) 0x) (+ (* -0.5 wPIC) (* 0.5 wpixel) (* (- ZZZ YYY) wpixel)) (- (+ dpml (* (- ZZZ YYY) zpixel) (/ zpixel 2)) 0z))
- (size Lpixel wpixel zpixel)
- (material (make dielectric (epsilon 10.24))))
-
-
-)
-)
-(set! sources
-(list
-
-(make source (src (make continuous-src (wavelength wave) (width 10)))
-(component Ey) (center (- dpml 0x) 0 0) (size 0 Wsilicon Hsilicon)
-)
-)
-)
-
-(use-output-directory)
-
-
-(run-until T
-
-(at-beginning output-epsilon)
-(at-end output-efield-y)
-(at-end output-efield-x)
-)

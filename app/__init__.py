@@ -1,8 +1,8 @@
 from time import sleep
 from sys import stdout
 
-def endless_loop(func, sleep_time=10):
 
+def endless_loop(func, sleep_time=10):
     while True:
         func()
         print('\n... _(:3J∠)_ ', end='')

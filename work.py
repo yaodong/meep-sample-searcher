@@ -3,6 +3,9 @@ from app.handlers.maxmin import MaxMin
 from app.handlers.polarizer import Polarizer
 from app import utils
 from app import clean
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 handlers = {
     'maxmin': MaxMin,
@@ -10,7 +13,8 @@ handlers = {
 }
 
 current_running_configs = [
-    ('maxmin', '30x60_feb', 1)
+    # ('maxmin', '30x60_feb', 3),
+    ('polarizer', '20x20', 1)
 ]
 
 loop_count = -1
@@ -21,25 +25,20 @@ def main():
 
     loop_count += 1
 
-    # print('loop %i' % loop_count)
-    # print('-' * 30)
-    #
-    # print('cleaning ...')
+    logging.info('cleaning ...')
     # clean.clean()
-    # print('cleaning done')
-    # print('-' * 30)
+    logging.info('cleaning done')
 
     for category, group, max_running_limit in current_running_configs:
 
         if loop_count % 5 == 0:
-            print('check shortage %s' % category)
+            logging.info('check shortage %s' % category)
             utils.fill_shortage(category, group, max_running_limit)
-            print('-' * 30)
 
         for sample in utils.fetch_running_samples(category, group):
+            logging.info('working on %i' % sample.id)
             handler_class = handlers[category]
             handler_class(sample).work()
-            print('-' * 30)
 
 
 if __name__ == '__main__':

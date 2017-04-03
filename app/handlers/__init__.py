@@ -3,6 +3,7 @@ from app.params import *
 from os import path, makedirs
 from app.db import session
 from app import chpc
+import logging
 
 
 class Handler:
@@ -94,7 +95,7 @@ class Handler:
         raise NotImplementedError()
 
     def set_status(self, status):
-        pass
+        self.sample.status = status
 
     def render_tpl(self, name, variables=None):
         with open(path.join(self.tpl_folder, name + '.tpl'), 'r') as f:
@@ -120,8 +121,8 @@ class Handler:
     def describe_jobs(jobs):
         for job in jobs:
             if job['state'] == 'PD':
-                print('job %s %s [PD], expect start at %s' % (job['job_id'], job['job_name'], job['time_expect']))
+                logging.info('job %s %s [PD], expect start at %s' % (job['job_id'], job['job_name'], job['time_expect']))
             else:
-                print('job %s %s [%s], time used %s' % (job['job_id'], job['job_name'], job['state'], job['time_used']))
+                logging.info('job %s %s [%s], time used %s' % (job['job_id'], job['job_name'], job['state'], job['time_used']))
 
 
