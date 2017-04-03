@@ -1,6 +1,7 @@
 import sys
 from subprocess import Popen, PIPE
 from app.params import *
+import logging
 
 
 def squeue(keyword=None):
@@ -8,7 +9,7 @@ def squeue(keyword=None):
     %A job id  |  %j job name  |  %t status  |  %u user name
     %V submit time  |  %S expect start time
     """
-    command = 'squeue -o \\"%A\t%j\t%t\t%u\t%M\t%V\t%S\\" | grep ' + CHPC_USER
+    command = 'squeue -o \'%A %j %t %u %M %V %S\' | grep ' + CHPC_USER
     if keyword is not None:
         command += ' | grep %s' % keyword
 
@@ -17,7 +18,7 @@ def squeue(keyword=None):
     if len(output) > 0:
         lines = output.split('\n')
         for line in lines:
-            job_id, job_name, state, user_name, time_used, time_submit, time_expect = line.split('\t')
+            job_id, job_name, state, user_name, time_used, time_submit, time_expect = line.split()
             jobs.append({
                 'job_id': job_id,
                 'job_name': job_name,
@@ -35,7 +36,6 @@ def rsync(local, dst):
 
 
 def remote_cmd(cmd):
-    #print('sshpass -p %s ssh %s "%s"' % (CHPC_PWD, CHPC_LOGIN, cmd))
     return local_cmd('sshpass -p %s ssh %s "%s"' % (CHPC_PWD, CHPC_LOGIN, cmd))
 
 
@@ -48,9 +48,11 @@ def sbatch(filename):
 
 
 def local_cmd(command):
+    logging.debug(command)
     try:
         res = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
         out, err = res.communicate()
+        logging.debug([out, err])
         return out.decode('utf-8').strip()
     except OSError as e:
         print("Error2: ", e.strerror)

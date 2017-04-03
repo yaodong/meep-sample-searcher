@@ -29,7 +29,7 @@ with open('depth.txt', 'w') as sf:
         if s.id > 41087:
             sf.write("%s\n" % (s.depth))
 
-# for s in samples:
+# for s in handlers:
 #     if not s.status == 'done':
 #         continue
 #     if s.id > 41065:

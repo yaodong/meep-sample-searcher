@@ -13,16 +13,16 @@ class Sample(db.Base):
     parent_id = Column(Integer)
     defect = Column(Integer)
 
-    category = Column(String)  # width x length x sub-class
+    category = Column(String)
+    group = Column(String)  # width x length x sub-class
 
     has_done = Column(Boolean, default=0)
     retried = Column(Integer, default=0)
 
     status = Column(String)
     rating = Column(Float, default=0)
-    depth = Column(Float, default=0)
-    loss_min = Column(Float)
-    loss_max = Column(Float)
+
+    results = Column(JSON)
 
     digest = Column(String)
 
@@ -41,20 +41,3 @@ class Sample(db.Base):
                 defects += 1
 
         self.defect = defects / len(points) * 100
-
-    def rate(self):
-        if not self.loss_max or not self.loss_min:
-            return False
-
-        self.depth = (self.loss_max - self.loss_min) / (self.loss_max + self.loss_min) * 100
-
-        loss_min_target = 0.05
-
-        if self.loss_min < loss_min_target:
-            g = 0
-        else:
-            g = ((loss_min_target - self.loss_min) / loss_min_target) ** 2
-
-        self.rating = ((self.loss_max - self.loss_min) / self.loss_max) ** 2 - g
-
-        return True

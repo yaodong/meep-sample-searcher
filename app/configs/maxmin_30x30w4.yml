@@ -1,0 +1,53 @@
+time: '01:30:00'
+width: 30
+length: 92
+graphene_length: 9.2
+meep_linput: 4
+meep_loutput: 4
+matlab: 30x30w4
+meep_input_waveguide: "(center (+ (- (/ (+ dpml linput) 2) 0x) 3.1) 0 (- (+ dpml
+  wairbound (/ hsilicon 2)) 0z))"
+meep_output_waveguide: "(center (- (+ dpml linput lPIC (/ (+ loutput dpml) 2)) 3.1
+  0x) 0 (- (+ dpml wairbound (/ hsilicon 2)) 0z))"
+meep_ez: "(component Ez) (center (- (+ dpml 3.1) 0x) 0 0) (size 0 winput hsilicon)"
+parts:
+  main:
+    tweak: keep
+    width:
+      offset: 0
+      size: 30
+    length:
+      offset: 31
+      size: 30
+  left_top:
+    tweak: square
+    width:
+      offset: 0
+      size: 11
+    length:
+      offset: 0
+      size: 30
+  left_bottom:
+    tweak: square
+    width:
+      offset: 19
+      size: 11
+    length:
+      offset: 0
+      size: 30
+  right_top:
+    tweak: square
+    width:
+      offset: 0
+      size: 11
+    length:
+      offset: 62
+      size: 30
+  right_bottom:
+    tweak: square
+    width:
+      offset: 19
+      size: 11
+    length:
+      offset: 62
+      size: 30

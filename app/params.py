@@ -1,5 +1,5 @@
 from os import environ
-from app import categories
+# from app import categories
 
 PROVIDERS = {
     'kingspeak': {
@@ -24,7 +24,7 @@ PROVIDERS = {
     }
 }
 
-CATEGORIES = categories.CATEGORIES
+# CATEGORIES = categories.CATEGORIES
 
 CURRENT_PROVIDER = PROVIDERS['kingspeak']
 

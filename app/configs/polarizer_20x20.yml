@@ -1,0 +1,22 @@
+tpl_prefix: polarizer
+time: '00:30:00'
+width: 20
+length: 60
+graphene_length: 6
+matlab: 20x60
+meep_linput: 2
+meep_loutput: 2
+meep_input_waveguide: "(center (- (/ (+ dpml linput) 2) 0x) 0 (- (+ dpml wairbound
+  (/ hsilicon 2)) 0z))"
+meep_output_waveguide: "(center (- (+ dpml linput lPIC (/ (+ loutput dpml) 2)) 0x)
+  0 (- (+ dpml wairbound (/ hsilicon 2)) 0z))"
+meep_ez: "(component Ez) (center (- dpml 0x) 0 0) (size 0 winput hsilicon)"
+parts:
+  main:
+    tweak: square
+    width:
+      offset: 0
+      size: 20
+    length:
+      offset: 0
+      size: 60

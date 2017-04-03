@@ -14,7 +14,7 @@ LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/opengl/lib/glnxa64;
 export LD_LIBRARY_PATH;
 
 if [ ! -f loss-max.txt ]; then
-  if [ -f has-done-max.lock ]; then
+  if [ -f meep-max-out/hx-000200.00.h5 ]; then
     cd meep-max-out
     ~/bin/matlab_{__MATLAB_NAME__} > ../loss-max.txt
     cd ..
@@ -22,7 +22,7 @@ if [ ! -f loss-max.txt ]; then
 fi
 
 if [ ! -f loss-min.txt ]; then
-  if [ -f has-done-min.lock ]; then
+  if [ -f meep-min-out/hx-000200.00.h5 ]; then
     cd meep-min-out
     ~/bin/matlab_{__MATLAB_NAME__} > ../loss-min.txt
     cd ..

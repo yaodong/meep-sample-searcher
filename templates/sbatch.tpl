@@ -18,10 +18,4 @@ module load impi/5.1.3
 module load meep/1.3
 export GUILE_WARN_DEPRECATED="no"
 
-echo "__START__"
-
 mpirun -np $SLURM_NTASKS meep-mpi meep-{__MAX_MIN__}.ctl > run-{__MAX_MIN__}.log
-
-touch has-done-{__MAX_MIN__}.lock
-
-echo "__DONE__"

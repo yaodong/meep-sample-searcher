@@ -1,6 +1,7 @@
 from app.db import session
 from app import params
-from app.params import CATEGORIES
+from app.handlers.maxmin import MaxMin
+# from app.params import CATEGORIES
 from app.sample import Sample
 from sqlalchemy import desc
 from numpy import random
@@ -8,31 +9,32 @@ import numpy
 from app import tweak
 
 
-def fill_shortage(category, limit):
-    count_not_done = count_not_done_samples(category)
+def fill_shortage(category, group, limit):
+    count_not_done = count_running_samples(category, group)
     if count_not_done >= limit:
         return
 
-    print('fill category %s' % category)
+    print('fill category %s:%s' % (category, group))
 
     shortage = limit - count_not_done
     for _ in range(shortage):
-        create_samples_by_editor(category)
+        create_samples_by_editor(category, group)
 
 
-def count_not_done_samples(category):
-    return session.query(Sample).filter_by(category=category, has_done=0).count()
+def count_running_samples(category, group):
+    return session.query(Sample).filter_by(category=category, group=group, has_done=0).count()
 
 
-def fetch_in_progress_samples(category):
-    return session.query(Sample).filter_by(category=category, has_done=0).order_by('id').all()
+def fetch_running_samples(category, group):
+    return session.query(Sample).filter_by(category=category, group=group, has_done=0).order_by('id').all()
 
 
-def select_parent(category):
+def select_parent(category, group):
     samples = session.query(Sample).filter_by(
         has_done=1,
         status='done',
-        category=category
+        category=category,
+        group=group,
     ).order_by(desc(Sample.rating)).limit(10).all()
 
     if not samples:
@@ -48,18 +50,21 @@ def select_parent(category):
     return selected
 
 
-def create_samples_by_editor(category):
-    parent = select_parent(category)
+def create_samples_by_editor(category, group):
+    parent = select_parent(category, group)
 
     if not parent:
         print('no seed found for %s' % category)
         return
 
-    parts = create_parts(parent)
+    # parts = create_parts(parent)
+
+    parts = MaxMin(parent).create_parts(parent)
 
     sample = Sample()
     sample.parent_id = parent.id
     sample.category = parent.category
+    sample.group = parent.group
     sample.defect = 0
     sample.parts = parts
     sample.update_digest()
@@ -68,25 +73,6 @@ def create_samples_by_editor(category):
         session.add(sample)
         session.commit()
 
-
-def create_parts(parent):
-    category_params = params.CATEGORIES[parent.category]
-
-    new_parts = {}
-    for part_name, part_cfg in category_params['parts'].items():
-        tweak_module = getattr(tweak, category_params['parts'][part_name]['tweak'])
-        tweak_method = getattr(tweak_module, 'tweak')
-
-        if part_name in parent.parts:
-            old_part = parent.parts[part_name]
-        else:
-            part_width = part_cfg['width']['size']
-            part_length = part_cfg['length']['size']
-            old_part = [random.randint(2) for _ in range(part_width * part_length)]
-
-        new_parts[part_name] = tweak_method(old_part, part_cfg)
-
-    return new_parts
 
 
 def digest_exists(digest):

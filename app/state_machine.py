@@ -38,13 +38,13 @@ class StateMachine:
 
     def when_ready(self):
         print('generating files')
-        self.handler.make_program_files()
+        self.handler.make_files()
 
         print('uploading files')
-        self.handler.upload_program_files()
+        self.handler.upload_files()
 
         print('submitting task')
-        self.handler.submit_all()
+        self.handler.submit_all_jobs()
         self.current_status = self.STATE_SUBMITTED
 
     def when_submitted(self):
@@ -59,9 +59,9 @@ class StateMachine:
                 self.current_status = self.STATE_RATING
             else:
                 print('re-making')
-                self.handler.make_program_files()
+                self.handler.make_files()
                 print('re-uploading')
-                self.handler.upload_program_files()
+                self.handler.upload_files()
                 print('re-starting')
                 self.restart_failed_jobs(finished)
 
@@ -108,7 +108,7 @@ class StateMachine:
     def finished_jobs(self):
         finished = []
         for m_type in ['min', 'max']:
-            if self.handler.fetch_type_is_done(m_type):
+            if self.handler.is_type_done(m_type):
                 finished.append(m_type)
 
         return finished

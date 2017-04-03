@@ -1,4 +1,4 @@
-
+*******
   (make block                             ; output waveguide 2
   {__OUTPUT_WAVEGUIDE__}
   (size (+ loutput dpml) woutput hsilicon)
@@ -9,11 +9,11 @@
   (size lgraphene wgraphene hgraphene)
   (material mygraphene)   ; Minimum absorption
   )
+*******
+
 
 )
 )
-
-;(set! k-point (vector3 7.3 0 0))
 
 (set! sources
 (list
@@ -33,7 +33,6 @@
 
 (at-beginning output-epsilon)
 (at-end output-efield-y)
-(at-end output-efield-z)
+(at-end output-efield-z)******
 (at-end output-efield-x)
-(at-end output-hfield-x)
 )
