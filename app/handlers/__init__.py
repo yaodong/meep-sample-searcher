@@ -114,8 +114,7 @@ class Handler:
         chpc.sbatch(path.join(self.remote_sample_folder, 'sbatch-%s.sh' % job_name))
 
     def fetch_jobs(self):
-        # return chpc.squeue('%i-%s-%s' % (self.sample.id, self.sample.category, self.sample.group))
-        return chpc.squeue('meep-%i' % self.sample.id)
+        return chpc.squeue(self.sample.job_name)
 
     @staticmethod
     def describe_jobs(jobs):

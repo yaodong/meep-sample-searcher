@@ -41,3 +41,7 @@ class Sample(db.Base):
                 defects += 1
 
         self.defect = defects / len(points) * 100
+
+    @property
+    def job_name(self):
+        return '-'.join([str(self.id), self.category, self.group])

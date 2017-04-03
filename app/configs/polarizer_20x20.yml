@@ -3,7 +3,7 @@ time: '00:30:00'
 width: 20
 length: 60
 graphene_length: 6
-matlab: 20x60
+matlab: polarizer_20x60
 meep_linput: 2
 meep_loutput: 2
 meep_input_waveguide: "(center (- (/ (+ dpml linput) 2) 0x) 0 (- (+ dpml wairbound

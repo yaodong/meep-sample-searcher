@@ -2,7 +2,6 @@ from . import Handler
 from shutil import rmtree
 from app import chpc
 from app.params import *
-import numpy
 import re
 from numpy import random
 import numpy
@@ -31,7 +30,7 @@ class MaxMin(Handler):
         self.sample.has_done = 1
 
     def pull(self):
-        print('pulling...')
+        print('pulling... %s' % self.sample.id)
         jobs = self.fetch_jobs()
         print(jobs)
         if len(jobs) > 0:
@@ -104,7 +103,7 @@ class MaxMin(Handler):
 
         for m_type in self.TYPES:
             content = self.render_tpl('sbatch', {
-                '__NAME__': 'meep-%i-%s' % (self.sample.id, m_type),
+                '__NAME__': '%s-%s' % (self.sample.job_name, m_type),
                 '__ROOT_DIR__': CHPC_WORK_DIR,
                 '__SUB_DIR__': self.sample.digest,
                 '__ACCOUNT__': SBATCH_ACCOUNT,

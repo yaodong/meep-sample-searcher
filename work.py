@@ -1,5 +1,4 @@
 from app import endless_loop
-from app.worker import Worker
 from app.handlers.maxmin import MaxMin
 from app.handlers.polarizer import Polarizer
 from app import utils
@@ -31,7 +30,6 @@ def main():
     # print('-' * 30)
 
     for category, group, max_running_limit in current_running_configs:
-        print((category, group, max_running_limit))
 
         if loop_count % 5 == 0:
             print('check shortage %s' % category)
