@@ -25,8 +25,8 @@ def count_running_samples(category, group):
     return session.query(Sample).filter_by(category=category, group=group, has_done=0).count()
 
 
-def fetch_running_samples(category, group):
-    return session.query(Sample).filter_by(category=category, group=group, has_done=0).order_by('id').all()
+def fetch_running_samples(category, group, max_limit):
+    return session.query(Sample).filter_by(category=category, group=group, has_done=0).order_by('id').limit(max_limit).all()
 
 
 def select_parent(category, group):

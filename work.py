@@ -5,7 +5,7 @@ from app import utils
 from app import clean
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 handlers = {
     'maxmin': MaxMin,
@@ -13,7 +13,7 @@ handlers = {
 }
 
 current_running_configs = [
-    # ('maxmin', '30x60_feb', 3),
+    ('maxmin', '30x60_feb', 1),
     ('polarizer', '20x20', 1)
 ]
 
@@ -30,12 +30,11 @@ def main():
     logging.info('cleaning done')
 
     for category, group, max_running_limit in current_running_configs:
-
         if loop_count % 5 == 0:
             logging.info('check shortage %s' % category)
             utils.fill_shortage(category, group, max_running_limit)
 
-        for sample in utils.fetch_running_samples(category, group):
+        for sample in utils.fetch_running_samples(category, group, 100):
             logging.info('working on %i' % sample.id)
             handler_class = handlers[category]
             handler_class(sample).work()

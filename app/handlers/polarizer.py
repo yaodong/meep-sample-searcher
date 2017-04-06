@@ -13,7 +13,10 @@ class Polarizer(Handler):
         pass
 
     def restart(self):
-        raise NotImplementedError()
+        logging.info('restarting job')
+        self.make_files()
+        self.upload_files()
+        self.submit_job('main')
 
     def abandon(self):
         raise NotImplementedError()
@@ -108,11 +111,10 @@ class Polarizer(Handler):
             return False
 
     def call_matlab(self):
-        # chpc.remote_cmd('/bin/bash %s/matlab.sh' % self.remote_sample_folder)
-        pass
+        chpc.remote_cmd('/bin/bash %s/matlab.sh' % self.remote_sample_folder)
 
     def fetch_matlab_result(self):
-        out = chpc.remote_cmd('cat %s/results.txt' % self.remote_sample_folder)
+        out = chpc.remote_cmd('cat %s/result.txt' % self.remote_sample_folder)
         out = str(out).strip()
         number = re.sub("[^e0-9-.]+", "", out, flags=re.IGNORECASE | re.MULTILINE)
         return float(number)

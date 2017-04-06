@@ -32,6 +32,3 @@ for defect in range(10, 100, 5):
 
         session.add(s)
         session.commit()
-        break
-
-    break
