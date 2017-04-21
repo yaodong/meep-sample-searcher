@@ -13,8 +13,8 @@ handlers = {
 }
 
 current_running_configs = [
-    ('maxmin', '30x60_feb', 1),
-    ('polarizer', '20x20', 1)
+#    ('maxmin', '30x60_feb', 10),
+    ('polarizer', '20x20', 30)
 ]
 
 loop_count = -1
@@ -26,7 +26,7 @@ def main():
     loop_count += 1
 
     logging.info('cleaning ...')
-    # clean.clean()
+    clean.clean()
     logging.info('cleaning done')
 
     for category, group, max_running_limit in current_running_configs:
