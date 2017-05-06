@@ -5,7 +5,7 @@ from app import utils
 from app import clean
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 handlers = {
     'maxmin': MaxMin,
@@ -13,8 +13,7 @@ handlers = {
 }
 
 current_running_configs = [
-    ('maxmin', '30x60_feb', 1),
-    ('polarizer', '20x20', 1)
+    ('polarizer', '20x20', 0)
 ]
 
 loop_count = -1

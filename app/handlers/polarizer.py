@@ -3,6 +3,7 @@ from app.params import *
 import numpy, logging
 from app import chpc
 import re
+from hashlib import md5
 
 
 class Polarizer(Handler):
@@ -50,7 +51,7 @@ class Polarizer(Handler):
 
         self.sample.status = self.STATE_DONE
         self.sample.has_done = 1
-        self.sample.rating = result * 1e5
+        self.sample.rating = result
         self.sample.results = {
             'result': result
         }
@@ -71,22 +72,16 @@ class Polarizer(Handler):
         footer = self.render_tpl('polarizer-meep-footer')
 
         points = []
+        layout = numpy.array(self.sample.parts).reshape((self.config['y_length'], self.config['z_length']))
 
-        for part_name, part_points in self.sample.parts.items():
-            part_cfg = self.config['parts'][part_name]
-            layout = numpy.array(part_points).reshape((part_cfg['y']['size'], part_cfg['z']['size']))
-
-            y_offset = part_cfg['y']['offset']
-            z_offset = part_cfg['z']['offset']
-
-            for r in range(0, len(layout)):
-                row = layout[r]
-                for c in range(0, len(row)):
-                    if int(row[c]) == 1:
-                        points.append(self.render_tpl('polarizer-meep-point', {
-                            '__Y__': c + 1 + y_offset,
-                            '__Z__': r + 1 + z_offset,
-                        }))
+        for row_index in range(0, len(layout)):
+            row = layout[row_index]
+            for col_index in range(0, len(row)):
+                points.append(self.render_tpl('polarizer-meep-point', {
+                    '__Y__': col_index + 1,
+                    '__Z__': row_index + 1,
+                    '__X__': row[col_index]
+                }))
 
         points = "\n\n".join(points)
 
@@ -104,7 +99,7 @@ class Polarizer(Handler):
         self.write_file('sbatch-main.sh', content)
 
     def is_job_done(self):
-        output = chpc.remote_cmd('ls -l %s/meep-out/hx-000300.00.h5' % self.remote_sample_folder)
+        output = chpc.remote_cmd('ls -l %s/meep-out/hx-000001000.h5' % self.remote_sample_folder)
         if len(output) > 0:
             return 'No such file or directory' not in output
         else:
@@ -114,7 +109,27 @@ class Polarizer(Handler):
         chpc.remote_cmd('/bin/bash %s/matlab.sh' % self.remote_sample_folder)
 
     def fetch_matlab_result(self):
-        out = chpc.remote_cmd('cat %s/result.txt' % self.remote_sample_folder)
+        out = chpc.remote_cmd('cat %s/meep-out/result.txt' % self.remote_sample_folder)
         out = str(out).strip()
         number = re.sub("[^e0-9-.]+", "", out, flags=re.IGNORECASE | re.MULTILINE)
         return float(number)
+
+    def generate_child(self):
+        from app.sample import Sample
+        sample = Sample()
+        sample.parent_id = self.sample.id
+        sample.category = self.sample.category
+        sample.group = self.sample.group
+        sample.defect = 0
+        sample.parts = self.mutate_parts(self.sample.parts)
+        sample.digest = self.calculate_digest(sample)
+
+        return sample
+
+    @staticmethod
+    def calculate_digest(sample):
+        return md5(','.join(str(p) for p in sample.parts).encode('utf-8')).hexdigest()
+
+    @staticmethod
+    def mutate_parts(parts):
+        return parts

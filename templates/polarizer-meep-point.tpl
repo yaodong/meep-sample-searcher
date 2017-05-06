@@ -1,9 +1,4 @@
-
-
- ; pixel z y
- ; pixel ZZZ YYY construction
- (make block
- (center (- (+ dpml Lsilicon (/ Lpixel 2)) 0x) (+ (* -0.5 wPIC) (* 0.5 wpixel) (* (- {__Z__} {__Y__}) wpixel)) (- (+ dpml (* (- {__Z__} {__Y__}) zpixel) (/ zpixel 2)) 0z))
- (size Lpixel wpixel zpixel)
+(make block
+ (center (- (+ dpml Lsilicon (/ {__X__} 2)) 0x) (+ (* -0.5 Wsilicon) (* 0.5 wpixel) (* (- {__Y__} 1) wpixel)) (+ (* -0.5 Hsilicon) (* 0.5 zpixel) (* (- {__Z__} 1) zpixel)))
+ (size {__X__} wpixel zpixel)
  (material (make dielectric (epsilon 10.24))))
-

@@ -1,6 +1,7 @@
 from app.db import session
 from app import params
 from app.handlers.maxmin import MaxMin
+from app.handlers.polarizer import Polarizer
 # from app.params import CATEGORIES
 from app.sample import Sample
 from sqlalchemy import desc
@@ -26,7 +27,8 @@ def count_running_samples(category, group):
 
 
 def fetch_running_samples(category, group, max_limit):
-    return session.query(Sample).filter_by(category=category, group=group, has_done=0).order_by('id').limit(max_limit).all()
+    return session.query(Sample).filter_by(category=category, group=group, has_done=0).order_by('id').limit(
+        max_limit).all()
 
 
 def select_parent(category, group):
@@ -59,20 +61,23 @@ def create_samples_by_editor(category, group):
 
     # parts = create_parts(parent)
 
-    parts = MaxMin(parent).create_parts(parent)
-
-    sample = Sample()
-    sample.parent_id = parent.id
-    sample.category = parent.category
-    sample.group = parent.group
-    sample.defect = 0
-    sample.parts = parts
-    sample.update_digest()
+    if parent.category == 'maxmin':
+        parts = MaxMin(parent).create_parts()
+        sample = Sample()
+        sample.parent_id = parent.id
+        sample.category = parent.category
+        sample.group = parent.group
+        sample.defect = 0
+        sample.parts = parts
+        sample.update_digest()
+    elif parent.category == 'polarizer':
+        sample = Polarizer(parent).generate_child()
+    else:
+        raise RuntimeError("unknown category")
 
     if not digest_exists(sample.digest):
         session.add(sample)
         session.commit()
-
 
 
 def digest_exists(digest):
