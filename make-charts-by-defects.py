@@ -2,25 +2,37 @@ import matplotlib
 from app.sample import Sample
 from app.db import session
 
-category = 'polarizer'
-group = '20x20'
+category = '30x30_nov'
 
 multiple = 1
-min_id = 89608
-max_id = 89787
+min_id = 41065
 
-samples = session.query(Sample).filter_by(category=category, group=group).filter(Sample.id >= min_id).filter(Sample.id <= max_id).order_by('id').all()
+samples = session.query(Sample).filter_by(category=category).order_by('id').all()
+
 sample_count = len(samples)
 
-# matplotlib.use('WXAgg')
+matplotlib.use('Qt5Agg')
+
 import matplotlib.pyplot as plt
 
 fig = plt.figure()
-plt.xlabel("Defect %")
-plt.ylabel("Result (*10^5)")
+plt.xlabel("Defect")
+plt.ylabel("Depth% (a.u.)")
 ax = fig.add_subplot(1, 1, 1)
 
-for s in samples:
-  ax.scatter(s.defect, s.rating, c='b')
+with open('sequeue.txt', 'w') as sf:
+    for s in samples:
+        if s.id > 41087:
+            sf.write("%s\n" % (s.id - 41087))
+with open('depth.txt', 'w') as sf:
+    for s in samples:
+        if s.id > 41087:
+            sf.write("%s\n" % (s.depth))
 
-fig.savefig('%s_result_by_defect.png' % category, dpi=200)
+# for s in handlers:
+#     if not s.status == 'done':
+#         continue
+#     if s.id > 41065:
+#         ax.scatter(s.id - 41065, s.depth, c='g')
+#
+# fig.savefig('%s_depth.png' % category, dpi=200)

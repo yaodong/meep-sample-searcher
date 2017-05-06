@@ -5,7 +5,7 @@ from app import utils
 from app import clean
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 handlers = {
     'maxmin': MaxMin,
@@ -25,7 +25,7 @@ def main():
     loop_count += 1
 
     logging.info('cleaning ...')
-    # clean.clean()
+    #clean.clean()
     logging.info('cleaning done')
 
     for category, group, max_running_limit in current_running_configs:
