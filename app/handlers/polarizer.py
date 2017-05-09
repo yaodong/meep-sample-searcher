@@ -4,6 +4,7 @@ import numpy, logging
 from app import chpc
 import re
 from hashlib import md5
+from random import randint, random
 
 
 class Polarizer(Handler):
@@ -130,6 +131,19 @@ class Polarizer(Handler):
     def calculate_digest(sample):
         return md5(','.join(str(p) for p in sample.parts).encode('utf-8')).hexdigest()
 
-    @staticmethod
-    def mutate_parts(parts):
-        return parts
+    def mutate_parts(self, parts):
+        row = randint(0, 15)
+        col = randint(0, 15)
+
+        layout = numpy.array(parts).reshape((self.config['y_length'], self.config['z_length']))
+
+        for row_index in range(row, row + 4):
+            for col_index in range(col, col + 4):
+                if random() > 0.5:
+                    original_value = layout[row_index][col_index]
+                    tweaked_value = original_value + randint(-50, 50)
+                    if tweaked_value < 0:
+                        tweaked_value = 0
+                    layout[row_index][col_index] = tweaked_value
+
+        return layout.flatten().tolist()
