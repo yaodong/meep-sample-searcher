@@ -110,7 +110,7 @@ class Polarizer(Handler):
         chpc.remote_cmd('/bin/bash %s/matlab.sh' % self.remote_sample_folder)
 
     def fetch_matlab_result(self):
-        out = chpc.remote_cmd('cat %s/meep-out/result.txt' % self.remote_sample_folder)
+        out = chpc.remote_cmd('cat %s/results.txt' % self.remote_sample_folder)
         out = str(out).strip()
         number = re.sub("[^e0-9-.]+", "", out, flags=re.IGNORECASE | re.MULTILINE)
         return float(number)
