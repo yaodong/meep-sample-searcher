@@ -141,7 +141,7 @@ class Polarizer(Handler):
             for col_index in range(col, col + 4):
                 if random() > 0.5:
                     original_value = layout[row_index][col_index]
-                    tweaked_value = original_value + randint(-50, 50)
+                    tweaked_value = original_value + randint(-20, 20) * 50
                     if tweaked_value < 0:
                         tweaked_value = 0
                     layout[row_index][col_index] = tweaked_value

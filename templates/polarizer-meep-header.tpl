@@ -1,7 +1,6 @@
-(define-param Lsilicon 600)              ; The thickness of Silicon
 (define-param Wsilicon 2000)           ; The width of pixel surface
 (define-param Hsilicon 2000)           ; The height of Silicon
-(define-param Lpixel   500)                ; The thickness of Pixel
+(define-param Lpixel   1000)                ; The thickness of Pixel
 (define-param wPIC   5000)              ; The length of Pixel
 (define-param hPIC   5000)              ; The height of Pixel
 (define-param airbound 1000)              ; The thickness of Air
@@ -10,7 +9,7 @@
 (define-param wpixel (/ Wsilicon ny))                    ; width of pixel in propagation direction
 (define-param zpixel (/ Hsilicon ny))                    ; height of pixel in z direction
 (define-param dpml 200)                    ; thickness of pml
-(define-param sx (+ Lsilicon Lpixel airbound))                  ; size of structure cell in X
+(define-param sx (+ Lpixel airbound))                  ; size of structure cell in X
 (define-param sy wPIC)                  ; size of structure cell in Y
 (define-param sz hPIC)                  ; size of structure cell in Z
 (define-param sxvert (+ sx (* 2 dpml))) ; computation size in X
@@ -37,7 +36,3 @@
 
 (set! geometry
 (list
- (make block                             ; Silicon
- (center (- (/ (+ dpml Lsilicon) 2) 0x) 0 0)
- (size (+ dpml Lsilicon) Wsilicon Hsilicon)
- (material (make dielectric (epsilon 10.24))))
