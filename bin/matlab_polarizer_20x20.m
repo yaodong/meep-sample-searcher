@@ -4,7 +4,7 @@ Einfo = hdf5info('ez-000001000.h5');
 E1 = hdf5read(Einfo.GroupHierarchy.Datasets(1));
 E2 = hdf5read(Einfo.GroupHierarchy.Datasets(2));
 Ez = abs(E1*1i+E2).^2;
-E_slice(:,:) = Ez(:,:,10);
+E_slice(:,:) = Ez(:,:,11);
 ezt = mean(E_slice(:));
 
 %Ey transmission
