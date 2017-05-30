@@ -52,10 +52,11 @@ class Polarizer(Handler):
 
         self.sample.status = self.STATE_DONE
         self.sample.has_done = 1
-        self.sample.rating = result
         self.sample.results = {
             'result': result
         }
+
+        self.sample.rating = -numpy.log(numpy.sqrt((result['eyt'] - 0.028) ** 2 + result['ezt'] ** 2))
 
     def make_files(self):
         self.make_meep_files()
@@ -110,10 +111,14 @@ class Polarizer(Handler):
         chpc.remote_cmd('/bin/bash %s/matlab.sh' % self.remote_sample_folder)
 
     def fetch_matlab_result(self):
-        out = chpc.remote_cmd('cat %s/results.txt' % self.remote_sample_folder)
+        out = chpc.remote_cmd('cat %s/results.csv' % self.remote_sample_folder)
         out = str(out).strip()
-        number = re.sub("[^e0-9-.]+", "", out, flags=re.IGNORECASE | re.MULTILINE)
-        return float(number)
+        data = {}
+        for item in out.split(','):
+            name, value = item.split(":")
+            data[name] = float(value)
+
+        return data
 
     def generate_child(self):
         from app.sample import Sample
