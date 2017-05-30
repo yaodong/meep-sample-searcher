@@ -17,5 +17,5 @@
 (at-beginning output-epsilon)
 (at-end output-efield-y)
 (at-end output-efield-z)
-(at-end output-efield-x)
+(at-end output-hfield-x)
 )
