@@ -4,7 +4,7 @@ Einfo = hdf5info('ez-000001000.h5');
 E1 = hdf5read(Einfo.GroupHierarchy.Datasets(1));
 E2 = hdf5read(Einfo.GroupHierarchy.Datasets(2));
 Ez = abs(E1*1i+E2).^2;
-E_slice(:,:) = Ez(:,:,11);
+E_slice(:,:) = Ez(:,:,100);
 ezt = mean(E_slice(:));
 
 %Ey transmission
@@ -16,8 +16,7 @@ E_slice1(:,:) = Ey(:,:,100);
 eyt = mean(E_slice1(:));
 
 %Transmission
-T = eyt/ezt;
+T = [eyt, ezt];
 
-fileID = fopen('../results.txt', 'w')
-fprintf(fileID, '%f', T)
-
+fileID = fopen('../results.csv', 'w')
+fprintf(fileID, 'eyt:%f,ezt:%f', T)
