@@ -101,7 +101,7 @@ class Polarizer(Handler):
         self.write_file('sbatch-main.sh', content)
 
     def is_job_done(self):
-        output = chpc.remote_cmd('ls -l %s/meep-out/hx-000300.00.h5' % self.remote_sample_folder)
+        output = chpc.remote_cmd('ls -l %s/meep-out/hx-000001000.h5' % self.remote_sample_folder)
         if len(output) > 0:
             return 'No such file or directory' not in output
         else:
