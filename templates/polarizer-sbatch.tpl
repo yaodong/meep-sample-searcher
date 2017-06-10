@@ -7,6 +7,7 @@
 
 #SBATCH --account={__ACCOUNT__}
 #SBATCH --partition={__PARTITION__}
+#SBATCH --reservation=7new-McPherson
 
 cd "{__WORKDIR__}"
 
