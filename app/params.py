@@ -21,12 +21,17 @@ PROVIDERS = {
         'CHPC_SERVER': 'ash-guest',
         'SBATCH_ACCOUNT': 'smithp-guest',
         'SBATCH_PARTITION': 'ash-guest'
+    },
+    'tangent': {
+        'CHPC_SERVER': 'tangent',
+        'SBATCH_ACCOUNT': 'sensale',
+        'SBATCH_PARTITION': 'tangent'
     }
 }
 
 # CATEGORIES = categories.CATEGORIES
 
-CURRENT_PROVIDER = PROVIDERS['kingspeak']
+CURRENT_PROVIDER = PROVIDERS['tangent']
 
 CHPC_PWD = '5896397Wxb@'  # environ['CHPC_PWD']
 CHPC_SERVER = CURRENT_PROVIDER['CHPC_SERVER']
