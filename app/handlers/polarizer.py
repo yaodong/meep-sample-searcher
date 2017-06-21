@@ -1,8 +1,8 @@
 from . import Handler
 from app.params import *
-import numpy, logging
+import numpy
+import logging
 from app import chpc
-import re
 from hashlib import md5
 from random import randint, random
 
@@ -56,7 +56,7 @@ class Polarizer(Handler):
             'result': result
         }
 
-        self.sample.rating = -numpy.log(numpy.sqrt((result['eyt'] - 0.028) ** 2 + result['ezt'] ** 2))
+        self.sample.rating = -numpy.log(numpy.sqrt((result['eyt'] - 0.028) ** 2 + result['ezt'] ** 2 + result['ext'] ** 2))
 
     def make_files(self):
         self.make_meep_files()
