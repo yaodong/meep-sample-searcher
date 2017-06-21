@@ -1,0 +1,7 @@
+time: '00:40:00'
+ny: 20
+nz: 20
+matlab: polarizer_20x20
+tweak: polarizer
+z_length: 20
+y_length: 20
