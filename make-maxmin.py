@@ -3,9 +3,9 @@ from app.db import session
 import random
 
 width = 30
-length = 60
-category = 'maxmin'
-group = '30x60_feb'
+length = 30
+category = 'dopant'
+group = '30x30'
 size = width * length
 
 for defect in range(50, 100, 10):
