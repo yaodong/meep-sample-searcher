@@ -13,7 +13,8 @@ handlers = {
 }
 
 current_running_configs = [
-    ('polarizer', '20x20', 0)
+    #('maxmin', '30x60_feb', 0, 10)
+    ('polarizer', '20x20_june', 10, 10)
 ]
 
 loop_count = -1
@@ -24,19 +25,22 @@ def main():
 
     loop_count += 1
 
-    logging.info('cleaning ...')
-    #clean.clean()
-    logging.info('cleaning done')
-
-    for category, group, max_running_limit in current_running_configs:
+    for category, group, fill_limit, max_running_limit in current_running_configs:
         if loop_count % 5 == 0:
             logging.info('check shortage %s' % category)
-            utils.fill_shortage(category, group, max_running_limit)
+            if fill_limit > 0:
+                utils.fill_shortage(category, group, fill_limit)
 
-        for sample in utils.fetch_running_samples(category, group, 100):
+        logging.info("fetch up to %i samples" % max_running_limit)
+        for sample in utils.fetch_running_samples(category, group, max_running_limit):
             logging.info('working on %i' % sample.id)
             handler_class = handlers[category]
             handler_class(sample).work()
+
+    logging.info('cleaning ...')
+    clean.clean()
+    logging.info('cleaning done')
+
 
 
 if __name__ == '__main__':

@@ -6,10 +6,10 @@ from hashlib import md5
 width = 20
 length = 20
 category = 'polarizer'
-group = '20x20'
+group = '20x20_june'
 size = width * length
 
-count = 10
+count = 290
 
 for i in range(count):
     points = []

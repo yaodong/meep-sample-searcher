@@ -2,17 +2,23 @@ import matplotlib
 from app.sample import Sample
 from app.db import session
 
-category = '30x30_nov'
+category = 'maxmin'
+group = '30x60_feb'
+
+# seed 69136 - 69215
+# run 69316 - 91722
 
 multiple = 1
 
-samples = session.query(Sample).filter_by(category=category).order_by('id').all()
+samples = session.query(Sample)\
+                 .filter_by(group=group)\
+                 .filter_by(category=category)\
+                 .filter_by(status="done")\
+                 .filter(Sample.id>=69316).filter(Sample.id<=91722).order_by('id').all()
 
 sample_count = len(samples)
 
-matplotlib.use('Qt5Agg')
-
-start_id = 41065
+matplotlib.use('Agg')
 
 import matplotlib.pyplot as plt
 
@@ -23,12 +29,13 @@ ax = fig.add_subplot(1, 1, 1)
 
 i = 0
 for s in samples:
-    if s.depth > 60 and s.id >= start_id:
+    if s.results['depth'] > 60:
         i += 1
-        ax.scatter(i, s.loss_min * multiple, c='r')
-        ax.scatter(i, s.loss_max * multiple, c='g')
+        ax.scatter(i, s.results['loss_min'] * multiple, c='r', s=1)
+        ax.scatter(i, s.results['loss_max'] * multiple, c='g', s=1)
 
 fig.savefig('%s_loss.png' % category, dpi=200)
+
 
 # ====
 
@@ -39,9 +46,9 @@ ax = fig.add_subplot(1, 1, 1)
 
 i = 0
 for s in samples:
-    if s.depth > 60 and s.id >= start_id:
+    if s.results['depth'] > 60:
         i += 1
-        ax.scatter(i, s.loss_min * multiple, c='r')
+        ax.scatter(i, s.results['loss_min'] * multiple, c='r', s=1)
 
 fig.savefig('%s_loss_min.png' % category, dpi=200)
 
@@ -54,8 +61,8 @@ ax = fig.add_subplot(1, 1, 1)
 
 i = 0
 for s in samples:
-    if s.depth > 60 and s.id >= start_id:
+    if s.results['depth'] > 60:
         i += 1
-        ax.scatter(i, s.loss_max * multiple, c='g')
+        ax.scatter(i, s.results['loss_max'] * multiple, c='g', s=1)
 
 fig.savefig('%s_loss_max.png' % category, dpi=200)

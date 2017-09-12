@@ -208,7 +208,7 @@ class MaxMin(Handler):
         return finished
 
     def is_type_done(self, m_type):
-        output = chpc.remote_cmd('ls -l %s/meep-%s-out/ex-000001000.h5' % (self.remote_sample_folder, m_type))
+        output = chpc.remote_cmd('ls -l %s/meep-%s-out/hx-000200.00.h5' % (self.remote_sample_folder, m_type))
         if len(output) > 0:
             return 'No such file or directory' not in output
         else:

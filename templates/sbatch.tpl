@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name={__NAME__}
 #SBATCH --time={__TIME__}
-#SBATCH --ntasks=152
+#SBATCH --ntasks=80
 #SBATCH -o job-out-{__MAX_MIN__}.log
 #SBATCH -e job-err-{__MAX_MIN__}.log
 
@@ -12,9 +12,8 @@ cd "{__WORKDIR__}"
 
 rm -rf ./meep-{__MAX_MIN__}-out
 
-module load intel/2017.0.098
-module load impi/5.1.3
+module load gcc/4.8.5
+module load mvapich2/2.2.g
 module load meep/1.3
-export GUILE_WARN_DEPRECATED="no"
 
 mpirun -np $SLURM_NTASKS meep-mpi meep-{__MAX_MIN__}.ctl > run-{__MAX_MIN__}.log
