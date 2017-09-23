@@ -1,6 +1,7 @@
 from app import endless_loop
 from app.handlers.maxmin import MaxMin
 from app.handlers.polarizer import Polarizer
+from app.handlers.dopant import Dopant
 from app import utils
 from app import clean
 import logging
@@ -10,11 +11,12 @@ logging.basicConfig(level=logging.INFO)
 handlers = {
     'maxmin': MaxMin,
     'polarizer': Polarizer,
+    'dopant': Dopant
 }
 
 current_running_configs = [
     #('maxmin', '30x60_feb', 0, 10)
-    ('polarizer', '20x20_june', 10, 10)
+    ('maxmin', '30x30_L', 10, 30)
 ]
 
 loop_count = -1

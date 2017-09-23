@@ -7,11 +7,10 @@
 
 #SBATCH --account={__ACCOUNT__}
 #SBATCH --partition={__PARTITION__}
-#SBATCH --res=xinbo-amo-5
 
 cd "{__WORKDIR__}"
 
-rm -rf ./meep-{__MAX_MIN__}-out
+rm -rf ./meep-{__KIND__}-out
 
 module load gcc/4.8.5
 module load mpich/3.2.g

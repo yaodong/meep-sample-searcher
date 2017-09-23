@@ -9,7 +9,7 @@ from app import tweak
 import logging
 
 
-class MaxMin(Handler):
+class Simple(Handler):
     TYPE_MIN = 'min'
     TYPE_MAX = 'max'
 
@@ -82,79 +82,61 @@ class MaxMin(Handler):
         self.sample.status = status
 
     def make_files(self):
-        self.make_meep_files()
-        self.make_matlab_files()
-        self.make_sbatch_files()
+        self.make_meep_file('max')
+        self.make_meep_file('min')
+        self.make_matlab_file()
+        self.make_sbatch_file('max')
+        self.make_sbatch_file('min')
 
     def submit_all_jobs(self):
-        self.submit_job(self.TYPE_MAX)
-        self.submit_job(self.TYPE_MIN)
+        self.submit_job('max')
+        self.submit_job('min')
 
-    def make_matlab_files(self):
+    def make_matlab_file(self):
         self.create_file('matlab.sh', self.template('matlab', {
             '__MATLAB_NAME__': self.config['matlab']
         }))
         self.create_file('xy.py', self.template('xy'))
 
-    def make_sbatch_files(self):
-        time_cost = self.config['time']
+    def make_sbatch_file(self, kind):
+        content = self.template('sbatch', {
+            '__NAME__': '{0}-{1}'.format(self.sample.job_name, kind),
+            '__TIME__': self.config['time'],
+            '__WORKDIR__': self.remote_sample_folder,
+            '__ACCOUNT__': SBATCH_ACCOUNT,
+            '__PARTITION__': SBATCH_PARTITION,
+            '__KIND__': kind
+        })
 
-        for m_type in self.TYPES:
-            content = self.template('sbatch', {
-                '__NAME__': '%s-%s' % (self.sample.job_name, m_type),
-                '__WORKDIR__': self.remote_sample_folder,
-                '__ACCOUNT__': SBATCH_ACCOUNT,
-                '__PARTITION__': SBATCH_PARTITION,
-                '__MAX_MIN__': m_type,
-                '__TIME__': time_cost
-            })
-            self.create_file('sbatch-%s.sh' % m_type, content)
+        self.create_file('sbatch-{0}.sh'.format(kind), content)
 
-    def make_meep_files(self):
+    def make_meep_file(self, kind):
+        header = self.template('header-{0}'.format(kind))
 
-        whole_width = self.config['width']
-        whole_length = self.config['length']
+        pixels = []
 
-        l_input = self.config['meep_linput']
-        l_output = self.config['meep_loutput']
+        for part_name, part_points in self.sample.parts.items():
+            part_cfg = self.config['layout'][part_name]
+            part_layout = numpy.array(part_points).reshape((part_cfg['width']['size'], part_cfg['length']['size']))
 
-        for min_max in self.TYPES:
-            header = self.template('meep-%s-header' % min_max, {
-                '__PIXEL_LENGTH__': whole_length / 10,
-                '__PIXEL_WIDTH__': whole_width / 10,
-                '__GRAPH_LENGTH__': self.config['graphene_length'],
-                '__RESOLUTION__': RESOLUTION,
-                '__LAYOUT_LENGTH__': whole_length,
-                '__LAYOUT_WIDTH__': whole_width,
-                '__L_INPUT__': l_input,
-                '__L_OUTPUT__': l_output,
-                '__INPUT_WAVEGUIDE__': self.config['meep_input_waveguide']
-            })
-            points = []
+            width_from = part_cfg['width']['from']
+            length_from = part_cfg['length']['from']
 
-            for part_name, part_points in self.sample.parts.items():
-                part_cfg = self.config['parts'][part_name]
-                layout = numpy.array(part_points).reshape((part_cfg['width']['size'], part_cfg['length']['size']))
+            for r in range(0, len(part_layout)):
+                row = part_layout[r]
+                for c in range(0, len(row)):
+                    if int(row[c]) == 1:
+                        pixels.append(self.template('pixel-{0}'.format(kind), {
+                            '__LENGTH_INDEX__': c + length_from,
+                            '__WIDTH_INDEX__': r + width_from,
+                        }))
 
-                width_offset = part_cfg['width']['offset']
-                length_offset = part_cfg['length']['offset']
+        pixels = "\n\n".join(pixels)
 
-                for r in range(0, len(layout)):
-                    row = layout[r]
-                    for c in range(0, len(row)):
-                        if int(row[c]) == 1:
-                            points.append(self.template('meep-point', {
-                                '__LENGTH_OFFSET__': c + 1 + length_offset,
-                                '__WIDTH_OFFSET__': r + 1 + width_offset,
-                            }))
+        footer = self.template('footer-{0}'.format(kind))
 
-            points = "\n\n".join(points)
-            footer = self.template('meep-%s-footer' % min_max, {
-                '__OUTPUT_WAVEGUIDE__': self.config['meep_output_waveguide'],
-                '__EZ__': self.config['meep_ez']
-            })
-            content = header + points + footer
-            self.create_file('meep-' + min_max + '.ctl', content)
+        content = header + pixels + footer
+        self.create_file('meep-' + kind + '.ctl', content)
 
     def run_matlab(self):
         chpc.remote_shell_file('/'.join([CHPC_WORK_DIR, self.sample.digest, 'matlab.sh']))

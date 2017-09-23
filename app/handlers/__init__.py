@@ -22,9 +22,9 @@ class Handler:
             self.sample.status = self.STATE_READY
 
         self.local_data_folder = path.abspath(path.join(path.expanduser('~'), 'Documents', 'meep-data'))
-        self.local_sample_folder = path.join(self.local_data_folder, self.sample.digest)
+        self.local_sample_folder = path.join(self.local_data_folder, self.sample.id)
         self.remote_data_folder = CHPC_WORK_DIR
-        self.remote_sample_folder = path.join(self.remote_data_folder, self.sample.digest)
+        self.remote_sample_folder = path.join(self.remote_data_folder, self.sample.id)
         self.tpl_folder = path.abspath(path.join(path.dirname(__file__), '..', '..', 'templates'))
 
         if not path.isdir(self.local_sample_folder):
@@ -68,8 +68,7 @@ class Handler:
         pass
 
     def load_config(self):
-        filename = path.join(path.dirname(__file__), '..', 'configs', self.sample.category)
-        filename += '_' + self.sample.group + '.yml'
+        filename = path.join(path.dirname(__file__), '..', 'configs', self.sample.category) + '.yml'
         with open(filename) as f:
             self.config = yaml.safe_load(f)
 
@@ -97,8 +96,10 @@ class Handler:
     def set_status(self, status):
         self.sample.status = status
 
-    def render_tpl(self, name, variables=None):
-        with open(path.join(self.tpl_folder, name + '.tpl'), 'r') as f:
+    def template(self, name, variables=None):
+        template_file = path.join(self.tpl_folder, self.config['prefix'], name + '.txt')
+
+        with open(template_file, 'r') as f:
             content = f.read()
         if variables is not None:
             for k, v in variables.items():
@@ -108,11 +109,12 @@ class Handler:
     def upload_files(self):
         chpc.rsync(self.local_sample_folder, self.remote_data_folder)
 
-    def write_file(self, filename, content):
+    def create_file(self, filename, content):
         open(path.join(self.local_sample_folder, filename), 'w+').write(content)
 
     def submit_job(self, job_name):
-        chpc.sbatch(path.join(self.remote_sample_folder, 'sbatch-%s.sh' % job_name))
+        sbatch_file = path.join(self.remote_sample_folder, 'sbatch-{0}.sh'.format(job_name))
+        chpc.sbatch(sbatch_file)
 
     def fetch_jobs(self):
         return chpc.squeue(self.sample.job_name)

@@ -9,7 +9,7 @@ from app import tweak
 import logging
 
 
-class MaxMin(Handler):
+class Dopant(Handler):
     TYPE_MIN = 'min'
     TYPE_MAX = 'max'
 
@@ -91,16 +91,16 @@ class MaxMin(Handler):
         self.submit_job(self.TYPE_MIN)
 
     def make_matlab_files(self):
-        self.write_file('matlab.sh', self.render_tpl('matlab', {
+        self.create_file('matlab.sh', self.template('matlab', {
             '__MATLAB_NAME__': self.config['matlab']
         }))
-        self.write_file('xy.py', self.render_tpl('xy'))
+        self.create_file('xy.py', self.template('xy'))
 
     def make_sbatch_files(self):
         time_cost = self.config['time']
 
         for m_type in self.TYPES:
-            content = self.render_tpl('sbatch', {
+            content = self.template('sbatch', {
                 '__NAME__': '%s-%s' % (self.sample.job_name, m_type),
                 '__WORKDIR__': self.remote_sample_folder,
                 '__ACCOUNT__': SBATCH_ACCOUNT,
@@ -108,11 +108,11 @@ class MaxMin(Handler):
                 '__MAX_MIN__': m_type,
                 '__TIME__': time_cost
             })
-            self.write_file('sbatch-%s.sh' % m_type, content)
+            self.create_file('sbatch-%s.sh' % m_type, content)
 
     def make_meep_files(self):
         for min_max in self.TYPES:
-            header = self.render_tpl('dopant-header')
+            header = self.template('dopant-header')
             points = []
 
             for part_name, part_points in self.sample.parts.items():
@@ -126,15 +126,15 @@ class MaxMin(Handler):
                     row = layout[r]
                     for c in range(0, len(row)):
                         if int(row[c]) == 1:
-                            points.append(self.render_tpl('dopant-point-%s' % min_max, {
+                            points.append(self.template('dopant-point-%s' % min_max, {
                                 '__LENGTH_OFFSET__': c + 1 + length_offset,
                                 '__WIDTH_OFFSET__': r + 1 + width_offset,
                             }))
 
             points = "\n\n".join(points)
-            footer = self.render_tpl('dopant-footer' % min_max)
+            footer = self.template('dopant-footer')
             content = header + points + footer
-            self.write_file('dopant-' + min_max + '.ctl', content)
+            self.create_file('meep-' + min_max + '.ctl', content)
 
     def run_matlab(self):
         chpc.remote_shell_file('/'.join([CHPC_WORK_DIR, self.sample.digest, 'matlab.sh']))

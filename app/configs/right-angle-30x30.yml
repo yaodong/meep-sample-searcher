@@ -1,0 +1,12 @@
+time: '01:30:00'
+prefix: 'right-angle-30x30'
+matlab: 'matlab-right-angle-30x30'
+parts:
+  main:
+    tweak: square
+    width:
+      from: 1
+      to: 30
+    length:
+      from: 1
+      to: 30

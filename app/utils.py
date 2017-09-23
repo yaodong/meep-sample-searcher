@@ -1,6 +1,7 @@
 from app.db import session
 from app import params
 from app.handlers.maxmin import MaxMin
+from app.handlers.dopant import Dopant
 from app.handlers.polarizer import Polarizer
 # from app.params import CATEGORIES
 from app.sample import Sample
@@ -60,13 +61,19 @@ def create_samples_by_editor(category, group):
         return
 
     # parts = create_parts(parent)
-
-    if parent.category == 'maxmin':
+    if parent.category == 'dopant':
+        parts = Dopant(parent).create_parts(parent)
+        sample = Sample()
+        sample.parent_id = parent.id
+        sample.category = parent.category
+        sample.defect = 0
+        sample.parts = parts
+        sample.update_digest()
+    elif parent.category == 'maxmin':
         parts = MaxMin(parent).create_parts()
         sample = Sample()
         sample.parent_id = parent.id
         sample.category = parent.category
-        sample.group = parent.group
         sample.defect = 0
         sample.parts = parts
         sample.update_digest()

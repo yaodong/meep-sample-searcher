@@ -44,4 +44,4 @@ class Sample(db.Base):
 
     @property
     def job_name(self):
-        return '-'.join([str(self.id), self.category, self.group])
+        return '-'.join([str(self.id), self.category])

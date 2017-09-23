@@ -64,14 +64,14 @@ class Polarizer(Handler):
         self.make_sbatch_files()
 
     def make_matlab_files(self):
-        self.write_file('matlab.sh', self.render_tpl('polarizer-matlab', {
+        self.create_file('matlab.sh', self.template('polarizer-matlab', {
             '__MATLAB_NAME__': self.config['matlab']
         }))
         # self.write_file('xy.py', self.render_tpl('xy'))
 
     def make_meep_files(self):
-        header = self.render_tpl('polarizer-meep-header')
-        footer = self.render_tpl('polarizer-meep-footer')
+        header = self.template('polarizer-meep-header')
+        footer = self.template('polarizer-meep-footer')
 
         points = []
         layout = numpy.array(self.sample.parts).reshape((self.config['y_length'], self.config['z_length']))
@@ -79,7 +79,7 @@ class Polarizer(Handler):
         for row_index in range(0, len(layout)):
             row = layout[row_index]
             for col_index in range(0, len(row)):
-                points.append(self.render_tpl('polarizer-meep-point', {
+                points.append(self.template('polarizer-meep-point', {
                     '__Y__': col_index + 1,
                     '__Z__': row_index + 1,
                     '__X__': row[col_index]
@@ -88,17 +88,17 @@ class Polarizer(Handler):
         points = "\n\n".join(points)
 
         content = header + points + footer
-        self.write_file('meep.ctl', content)
+        self.create_file('meep.ctl', content)
 
     def make_sbatch_files(self):
-        content = self.render_tpl('polarizer-sbatch', {
+        content = self.template('polarizer-sbatch', {
             '__NAME__': self.sample.job_name,
             '__WORKDIR__': self.remote_sample_folder,
             '__ACCOUNT__': SBATCH_ACCOUNT,
             '__PARTITION__': SBATCH_PARTITION,
             '__TIME__': self.config['time']
         })
-        self.write_file('sbatch-main.sh', content)
+        self.create_file('sbatch-main.sh', content)
 
     def is_job_done(self):
         output = chpc.remote_cmd('ls -l %s/meep-out/hx-000001000.h5' % self.remote_sample_folder)
@@ -125,7 +125,6 @@ class Polarizer(Handler):
         sample = Sample()
         sample.parent_id = self.sample.id
         sample.category = self.sample.category
-        sample.group = self.sample.group
         sample.defect = 0
         sample.parts = self.mutate_parts(self.sample.parts)
         sample.digest = self.calculate_digest(sample)

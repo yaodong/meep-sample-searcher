@@ -30,7 +30,7 @@
 
 
 (define-param wave 1.55)                   ; wavelength
-(define-param res 25)                     ; resolution
+(define-param res 15)                     ; resolution
 (define-param theta (/ (* pi 0) 180))      ; incident angle
 (define-param T 200)                       ; output time
 (define-param T2 180)                      ; output time
@@ -53,4 +53,4 @@
   (make block                             ; input waveguide
   (center (- (/ (+ dpml linput) 2) 0x) 0 (- (+ dpml wairbound (/ hsilicon 2)) 0z))
   (size (+ dpml linput) winput hsilicon)
-  (material (make dielectric (epsilon 10.24) (D-conductivity (/ (* 2 pi 0.6452 0.0000671) 10.24)))))
+  (material (make dielectric (epsilon 10.24))))

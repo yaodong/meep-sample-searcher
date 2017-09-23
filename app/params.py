@@ -26,7 +26,13 @@ PROVIDERS = {
         'CHPC_SERVER': 'tangent',
         'SBATCH_ACCOUNT': 'sensale',
         'SBATCH_PARTITION': 'tangent'
+    },
+   'lonepeak': {
+        'CHPC_SERVER': 'lonepeak',
+        'SBATCH_ACCOUNT': 'sensale',
+        'SBATCH_PARTITION': 'lonepeak'
     }
+
 }
 
 # CATEGORIES = categories.CATEGORIES
@@ -40,6 +46,7 @@ CHPC_LOGIN = '%s@%s.chpc.utah.edu' % (CHPC_USER, CHPC_SERVER)
 
 SBATCH_ACCOUNT = CURRENT_PROVIDER['SBATCH_ACCOUNT']
 SBATCH_PARTITION = CURRENT_PROVIDER['SBATCH_PARTITION']
+SBATCH_RES = CURRENT_PROVIDER['SBATCH_RES']
 
 CHPC_WORK_DIR = '/scratch/kingspeak/serial/u0930578/meep-workdir'
 

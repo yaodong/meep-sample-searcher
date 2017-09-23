@@ -1,11 +1,6 @@
-time: '01:30:00'
+time: '00:30:00'
 graphene_length: 3
-matlab: 30x30
-meep_input_waveguide: "(center (- (/ (+ dpml linput) 2) 0x) 0 (- (+ dpml wairbound
-  (/ hsilicon 2)) 0z))"
-meep_output_waveguide: "(center (- (+ dpml linput lPIC (/ (+ loutput dpml) 2)) 0x)
-  0 (- (+ dpml wairbound (/ hsilicon 2)) 0z))"
-meep_ez: "(component Ez) (center (- dpml 0x) 0 0) (size 0 winput hsilicon)"
+matlab: dopant_30x30
 parts:
   main:
     tweak: square

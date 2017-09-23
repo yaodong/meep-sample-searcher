@@ -26,7 +26,7 @@ def clean():
 
 def is_top_one(sample):
     top_10 = session.query(Sample) \
-        .filter_by(category=sample.category, group=sample.group, status='done') \
+        .filter_by(category=sample.category, status='done') \
         .order_by(desc(Sample.rating)).limit(3)
     id_list = [s.id for s in top_10]
 

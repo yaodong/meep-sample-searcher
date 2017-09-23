@@ -7,11 +7,7 @@ for sample in session.query(Sample).order_by('id').all():
 
     i += 1
 
-    sample.results = {
-        'depth': sample.depth,
-        'loss_min': sample.loss_min,
-        'loss_max': sample.loss_max,
-    }
+    # edit here
 
     session.add(sample)
     if i % 2000 == 0:

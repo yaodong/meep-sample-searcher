@@ -4,7 +4,7 @@ import random
 
 width = 30
 length = 30
-category = 'dopant-30x30'
+category = 'right-angle-30x30'
 size = width * length
 
 for defect in range(10, 100, 10):

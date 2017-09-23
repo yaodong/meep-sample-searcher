@@ -5,8 +5,7 @@ from hashlib import md5
 
 width = 20
 length = 20
-category = 'polarizer'
-group = '20x20_june'
+category = 'polarizer-30x30'
 size = width * length
 
 count = 290
@@ -18,7 +17,6 @@ for i in range(count):
 
     s = Sample()
     s.category = category
-    s.group = group
     s.parent_id = 0
     s.parts = points
     s.digest = md5(','.join(str(p) for p in points).encode('utf-8')).hexdigest()
