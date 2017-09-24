@@ -21,11 +21,13 @@ class Handler:
         if self.sample.status is None:
             self.sample.status = self.STATE_READY
 
-        self.local_data_folder = path.abspath(path.join(path.expanduser('~'), 'Documents', 'meep-data'))
-        self.local_sample_folder = path.join(self.local_data_folder, self.sample.id)
+        self.root_folder = path.abspath(path.join(path.dirname(__file__), '..', '..'))
+
+        self.local_data_folder = path.abspath(path.join(self.root_folder, '..', 'files'))
+        self.local_sample_folder = path.join(self.local_data_folder, str(self.sample.id))
         self.remote_data_folder = CHPC_WORK_DIR
-        self.remote_sample_folder = path.join(self.remote_data_folder, self.sample.id)
-        self.tpl_folder = path.abspath(path.join(path.dirname(__file__), '..', '..', 'templates'))
+        self.remote_sample_folder = path.join(self.remote_data_folder, str(self.sample.id))
+        self.tpl_folder = path.join(self.root_folder, 'templates')
 
         if not path.isdir(self.local_sample_folder):
             makedirs(self.local_sample_folder, exist_ok=True)

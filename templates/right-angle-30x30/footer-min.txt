@@ -1,35 +1,35 @@
-  (make block                             ; output waveguide 2
-  (center (- (+ dpml linput (/ lPIC 2)) 0x) (- (/ (+ dpml loutput) 2) 0y) (- (+ dpml wairbound (/ hsilicon 2)) 0z))
-  (size woutput (+ dpml loutput) hsilicon)
-  (material (make dielectric (epsilon 10.24))))
- 
-  (make block                             ; graphene sheet
-  (center (- (+ dpml linput (/ lgraphene 2)) 0x) (- (+ dpml loutput (/ wgraphene 2)) 0y) (- (+ dpml wairbound hsilicon (/ hgraphene 2)) 0z))
-  (size lgraphene wgraphene hgraphene)
-  (material mygraphene)   ; Minimum absorption
-  )
- 
+(make block ; output waveguide 2
+(center (- (+ dpml linput (/ lPIC 2)) 0x) (- (/ (+ dpml loutput) 2) 0y) (- (+ dpml wairbound (/ hsilicon 2)) 0z))
+(size woutput (+ dpml loutput) hsilicon)
+(material (make dielectric (epsilon 10.24))))
+
+(make block ; graphene sheet
+(center (- (+ dpml linput (/ lgraphene 2)) 0x) (- (+ dpml loutput (/ wgraphene 2)) 0y) (- (+ dpml wairbound hsilicon (/ hgraphene 2)) 0z))
+(size lgraphene wgraphene hgraphene)
+(material mygraphene) ; Minimum absorption
+)
+
 )
 )
- 
+
 ;(set! k-point (vector3 7.3 0 0))
- 
+
 (set! sources
 (list
- 
-  (make source (src (make continuous-src (wavelength wave) (width 10)))
-  (component Ez) (center (- dpml 0x) 0 0) (size 0 winput hsilicon)
-  )
- 
+
+(make source (src (make continuous-src (wavelength wave) (width 10)))
+(component Ez) (center (- dpml 0x) (- (+ dpml loutput (/ wPIC 2)) 0y) 0) (size 0 winput hsilicon)
+)
+
 )
 )
- 
- 
+
+
 (use-output-directory)
- 
- 
+
+
 (run-until T
- 
+
 (at-beginning output-epsilon)
 (at-end output-efield-y)
 (at-end output-efield-z)

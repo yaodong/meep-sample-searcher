@@ -7,6 +7,7 @@
 
 #SBATCH --account={__ACCOUNT__}
 #SBATCH --partition={__PARTITION__}
+#SBATCH --res=xinbo-amo-5
 
 cd "{__WORKDIR__}"
 

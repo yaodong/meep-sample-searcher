@@ -1,5 +1,5 @@
 ;pixel {__LENGTH_INDEX__} {__WIDTH_INDEX__} construction
 (make block
-    (center (- (+ dpml linput (* lpixel (- {__LENGTH_INDEX__} 1)) (/ lpixel 2)) 0x) (- (+ dpml loutput (* wpixel (- {__WIDTH_INDEX__} 1)) (/ wpixel 2)) 0y) (- (+ dpml wairbound (/ hsilicon 2)) 0z))
-    (size lpixel wpixel hsilicon)
-    (material (make dielectric (epsilon 10.24))))
+    (center (- (+ dpml linput (* lpixel (- {__LENGTH_INDEX__} 1)) (/ lpixel 2)) 0x) (- (+ dpml loutput (* wpixel (- {__WIDTH_INDEX__} 1)) (/ wpixel 2)) 0y) (- (+ dpml wairbound (/ hsilicon 2)) 0z))
+    (size lpixel wpixel hsilicon)
+    (material (make dielectric (epsilon 10.24))))

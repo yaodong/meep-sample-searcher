@@ -96,7 +96,6 @@ class Simple(Handler):
         self.create_file('matlab.sh', self.template('matlab', {
             '__MATLAB_NAME__': self.config['matlab']
         }))
-        self.create_file('xy.py', self.template('xy'))
 
     def make_sbatch_file(self, kind):
         content = self.template('sbatch', {
@@ -116,8 +115,8 @@ class Simple(Handler):
         pixels = []
 
         for part_name, part_points in self.sample.parts.items():
-            part_cfg = self.config['layout'][part_name]
-            part_layout = numpy.array(part_points).reshape((part_cfg['width']['size'], part_cfg['length']['size']))
+            part_cfg = self.config['parts'][part_name]
+            part_layout = numpy.array(part_points).reshape((part_cfg['width']['to'], part_cfg['length']['to']))
 
             width_from = part_cfg['width']['from']
             length_from = part_cfg['length']['from']
@@ -126,7 +125,7 @@ class Simple(Handler):
                 row = part_layout[r]
                 for c in range(0, len(row)):
                     if int(row[c]) == 1:
-                        pixels.append(self.template('pixel-{0}'.format(kind), {
+                        pixels.append(self.template('pixel', {
                             '__LENGTH_INDEX__': c + length_from,
                             '__WIDTH_INDEX__': r + width_from,
                         }))
@@ -171,8 +170,6 @@ class Simple(Handler):
         return losses
 
     def fetch_matlab_result(self, m_type):
-        chpc.remote_cmd('/usr/bin/python %s/xy.py' % self.remote_sample_folder)
-
         out = chpc.remote_cmd('cat %s/loss-%s.txt' % (self.remote_sample_folder, m_type))
         out = str(out).strip()
         matched = re.match('.*\s*(\d+\.\d+)\s*.*', out, re.MULTILINE)

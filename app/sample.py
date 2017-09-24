@@ -14,7 +14,6 @@ class Sample(db.Base):
     defect = Column(Integer)
 
     category = Column(String)
-    group = Column(String)  # width x length x sub-class
 
     has_done = Column(Boolean, default=0)
     retried = Column(Integer, default=0)

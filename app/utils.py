@@ -11,25 +11,26 @@ import numpy
 from app import tweak
 
 
-def fill_shortage(category, group, limit):
-    count_not_done = count_running_samples(category, group)
+def fill_shortage(category, limit):
+    count_not_done = count_running_samples(category)
     if count_not_done >= limit:
         return
 
-    print('fill category %s:%s' % (category, group))
+    print('fill category {0}'.format(category))
 
     shortage = limit - count_not_done
     for _ in range(shortage):
-        create_samples_by_editor(category, group)
+        create_samples_by_editor(category)
 
 
 def count_running_samples(category, group):
     return session.query(Sample).filter_by(category=category, group=group, has_done=0).count()
 
 
-def fetch_running_samples(category, group, max_limit):
-    return session.query(Sample).filter_by(category=category, group=group, has_done=0).order_by('id').limit(
-        max_limit).all()
+def fetch_running_samples(category, size):
+    return session.query(Sample).filter_by(
+        category=category,
+        has_done=0).order_by('id').limit(size).all()
 
 
 def select_parent(category, group):
