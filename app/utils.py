@@ -3,6 +3,7 @@ from app import params
 from app.handlers.maxmin import MaxMin
 from app.handlers.dopant import Dopant
 from app.handlers.polarizer import Polarizer
+from app.handlers.simple import Simple
 # from app.params import CATEGORIES
 from app.sample import Sample
 from sqlalchemy import desc
@@ -23,8 +24,8 @@ def fill_shortage(category, limit):
         create_samples_by_editor(category)
 
 
-def count_running_samples(category, group):
-    return session.query(Sample).filter_by(category=category, group=group, has_done=0).count()
+def count_running_samples(category):
+    return session.query(Sample).filter_by(category=category, has_done=0).count()
 
 
 def fetch_running_samples(category, size):
@@ -33,12 +34,11 @@ def fetch_running_samples(category, size):
         has_done=0).order_by('id').limit(size).all()
 
 
-def select_parent(category, group):
+def select_parent(category):
     samples = session.query(Sample).filter_by(
         has_done=1,
         status='done',
-        category=category,
-        group=group,
+        category=category
     ).order_by(desc(Sample.rating)).limit(10).all()
 
     if not samples:
@@ -54,34 +54,20 @@ def select_parent(category, group):
     return selected
 
 
-def create_samples_by_editor(category, group):
-    parent = select_parent(category, group)
+def create_samples_by_editor(category):
+    parent = select_parent(category)
 
     if not parent:
         print('no seed found for %s' % category)
         return
 
-    # parts = create_parts(parent)
-    if parent.category == 'dopant':
-        parts = Dopant(parent).create_parts(parent)
-        sample = Sample()
-        sample.parent_id = parent.id
-        sample.category = parent.category
-        sample.defect = 0
-        sample.parts = parts
-        sample.update_digest()
-    elif parent.category == 'maxmin':
-        parts = MaxMin(parent).create_parts()
-        sample = Sample()
-        sample.parent_id = parent.id
-        sample.category = parent.category
-        sample.defect = 0
-        sample.parts = parts
-        sample.update_digest()
-    elif parent.category == 'polarizer':
-        sample = Polarizer(parent).generate_child()
-    else:
-        raise RuntimeError("unknown category")
+    parts = Simple(parent).create_parts(parent)
+    sample = Sample()
+    sample.parent_id = parent.id
+    sample.category = parent.category
+    sample.defect = 0
+    sample.parts = parts
+    sample.update_digest()
 
     if not digest_exists(sample.digest):
         session.add(sample)

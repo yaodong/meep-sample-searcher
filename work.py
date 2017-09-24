@@ -7,12 +7,12 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 current_running_configs = [
-    ('right-angle-30x30', 10, 30)
+    ('right-angle-30x30', 1, 1)
 ]
 
 handler = Simple
 category = 'right-angle-30x30'
-fill_limit = 10
+fill_limit = 0
 run_size = 10
 
 loop_count = -1
@@ -23,10 +23,10 @@ def main():
 
     loop_count += 1
 
-    # if loop_count % 5 == 0:
-    #     logging.info('check shortage %s' % category)
-    #     if fill_limit > 0:
-    #         utils.fill_shortage(category, fill_limit)
+    if loop_count % 5 == 0:
+        logging.info('check shortage %s' % category)
+        if fill_limit > 0:
+            utils.fill_shortage(category, fill_limit)
 
     logging.info("fetch up to %i samples" % run_size)
     for sample in utils.fetch_running_samples(category, run_size):

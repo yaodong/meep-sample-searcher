@@ -5,8 +5,8 @@ TWEAK_PROB = 0.1
 
 
 def tweak(points, cfg):
-    part_length = cfg['length']['size']
-    part_width = cfg['width']['size']
+    part_length = cfg['length']['to']
+    part_width = cfg['width']['to']
 
     layout = numpy.array(points).reshape((part_width, part_length))
 

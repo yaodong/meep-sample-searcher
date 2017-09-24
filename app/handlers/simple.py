@@ -227,8 +227,8 @@ class Simple(Handler):
             if part_name in parent.parts:
                 old_part = parent.parts[part_name]
             else:
-                part_width = part_cfg['width']['size']
-                part_length = part_cfg['length']['size']
+                part_width = part_cfg['width']['to'] - part_cfg['width']['from']
+                part_length = part_cfg['length']['to'] - part_cfg['length']['from']
                 old_part = [random.randint(2) for _ in range(part_width * part_length)]
 
             new_parts[part_name] = tweak_method(old_part, part_cfg)
